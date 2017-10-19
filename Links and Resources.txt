@@ -1,0 +1,4 @@
+Thsi file contains links and resources:
+
+Quick stack-overflow post about using maven to add dependancies using Maven:
+https://stackoverflow.com/questions/9164893/how-do-i-add-a-maven-dependency-in-eclipse
