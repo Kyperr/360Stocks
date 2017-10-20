@@ -3,46 +3,32 @@ package main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.Certificate;
+
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
 
 public class Main {
 
-	/*
-	 * I got this API key from the API we expect to use:
-	 * 9I4PMNR4QJFBDKQX
-	 */
-	
-	private final static String BASE_URL = "https://www.alphavantage.co/";
-	
+	private static String[] STOCK_SYMBOLS = {"AAPL", "AMZN", "TSLA"};
+
 	public static void main(String[] args) {
-		URL url;
+		Stock stock;
+		
 		try {
-			String test = "query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=1min&apikey=demo"; 
-					
-			url = new URL(BASE_URL + test);
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-	        conn.setRequestProperty("Accept", "application/json");
-	        BufferedReader in = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
-	        
-	        String inputLine;
-	        while ((inputLine = in.readLine()) != null) {
-	            System.out.println(inputLine);
-	        }	
-	        in.close();
-	        	
-	        
-	        
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			for (String symbol : STOCK_SYMBOLS) {
+
+				stock = YahooFinance.get(symbol);
+				stock.print();
+			}
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 }
