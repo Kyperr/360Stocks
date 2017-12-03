@@ -17,10 +17,10 @@
     </plugins>
   </build>
   <dependencies>
-  	<dependency>
-    	<groupId>com.yahoofinance-api</groupId>
-    	<artifactId>YahooFinanceAPI</artifactId>
-    	<version>3.11.0</version>
-	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>4.1.1</version>
+</dependency>
   </dependencies>
 </project>
