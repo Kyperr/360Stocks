@@ -44,10 +44,8 @@ public class SpecificPanel extends JPanel {
 		//set layout
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-		//add the content panel to the mainpanel
 		mainPanel.add(contentPanel);
 
-		//add the main panel to the Caesar jframe
 		add(mainPanel);
 
 		JPanel searchPanel = new JPanel();
@@ -77,6 +75,7 @@ public class SpecificPanel extends JPanel {
 		JTable table = new JTable(new DefaultTableModel(data, columns));
 		dataPanel.add(new JScrollPane(table));
 		table.setFillsViewportHeight(true);
+		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
 		TableColumn column = null;
@@ -90,7 +89,7 @@ public class SpecificPanel extends JPanel {
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//do the thing here
-				String symb = searchBox.getText();
+				String symb = searchBox.getText().toUpperCase();
 				// add pattern matching to not grunk up the search here
 				String jsonstring = dataModel.getSingleIntraday(symb);
 
