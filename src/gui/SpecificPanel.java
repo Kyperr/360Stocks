@@ -86,18 +86,15 @@ public class SpecificPanel extends JPanel {
 				JsonElement jelem = new JsonParser().parse(jsonstring);
 				JsonObject jobj = jelem.getAsJsonObject();
 				JsonObject jobjmeta = jobj.getAsJsonObject("Meta Data");
-				String jsymb = jobjmeta.get("2. Symbol").toString();
-				String jrefreshed = jobjmeta.get("3. Last Refreshed").toString();
+				String jsymb = jobjmeta.get("2. Symbol").getAsString();
+				String jrefreshed = jobjmeta.get("3. Last Refreshed").getAsString();
 				JsonObject timeSeries = jobj.getAsJsonObject("Time Series (1min)");
-				String timeSeriesJobj = timeSeries.get("2017-12-08 16:00:00").toString();
-				dataArea.setText(timeSeriesJobj);
-				//String tsstr = timeSeries.get(jrefreshed).toString();
-				//dataArea.setText(tsstr);
-//				String jopen = timeSeriesJobj.get("1. open").toString();
-//				dataArea.setText(jopen);
-//				String jclose = timeSeriesJobj.get("3. open").toString();
-//				String jvol = timeSeriesJobj.get("5. open").toString();
-//				dataArea.setText(jsymb + "\n" + jrefreshed + "\n" + jopen + "\n" + jclose + "\n" + jvol);
+				JsonObject timeSeriesJobj = timeSeries.getAsJsonObject(jrefreshed);
+				//dataArea.setText(timeSeriesJobj);
+				String jopen = timeSeriesJobj.get("1. open").getAsString();
+				String jclose = timeSeriesJobj.get("4. close").getAsString();
+				String jvol = timeSeriesJobj.get("5. volume").getAsString();
+				dataArea.setText(jrefreshed + "\n" + jopen + "\n" + jclose + "\n" + jvol);
 		
 				
 			}
