@@ -88,6 +88,12 @@ public class SpecificPanel extends JPanel {
 
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				int rows = model.getRowCount();
+				for (int i = rows -1; i >= 0; i--) {
+					model.removeRow(i);
+				}
+				
 				//do the thing here
 				String symb = searchBox.getText().toUpperCase();
 				// add pattern matching to not grunk up the search here
