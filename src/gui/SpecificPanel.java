@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -11,9 +12,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import main.DataModel;
 
@@ -64,39 +68,47 @@ public class SpecificPanel extends JPanel {
 		TitledBorder plainBorder;
 		plainBorder = BorderFactory.createTitledBorder("Stock Data");
 		dataPanel.setBorder(plainBorder);
-		JTextArea dataArea = new JTextArea(10, 30);
-		this.dataArea = dataArea;
-		dataArea.setEditable(true);
-		dataArea.setLineWrap(false);
-		dataPanel.add(new JScrollPane(dataArea));
+
 
 		contentPanel.add(dataPanel);
+		String[] columns = {"Date/Time", "Open", "Close", "Volume"};
+		String[][] data = {};
+		
+		JTable table = new JTable(new DefaultTableModel(data, columns));
+		dataPanel.add(new JScrollPane(table));
+		table.setFillsViewportHeight(true);
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		TableColumn column = null;
+		for (int i = 0; i < 4; i++ ) {
+			column = table.getColumnModel().getColumn(i);
+			if (i == 0) {
+				column.setPreferredWidth(100);
+			}
+		}
 
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//do the thing here
-				
-				StringBuilder sb = new StringBuilder();
 				String symb = searchBox.getText();
 				// add pattern matching to not grunk up the search here
-		
 				String jsonstring = dataModel.getSingleIntraday(symb);
-	
-				
+
 				JsonElement jelem = new JsonParser().parse(jsonstring);
 				JsonObject jobj = jelem.getAsJsonObject();
 				JsonObject jobjmeta = jobj.getAsJsonObject("Meta Data");
 				String jsymb = jobjmeta.get("2. Symbol").getAsString();
 				String jrefreshed = jobjmeta.get("3. Last Refreshed").getAsString();
 				JsonObject timeSeries = jobj.getAsJsonObject("Time Series (1min)");
-				JsonObject timeSeriesJobj = timeSeries.getAsJsonObject(jrefreshed);
-				//dataArea.setText(timeSeriesJobj);
-				String jopen = timeSeriesJobj.get("1. open").getAsString();
-				String jclose = timeSeriesJobj.get("4. close").getAsString();
-				String jvol = timeSeriesJobj.get("5. volume").getAsString();
-				dataArea.setText(jrefreshed + "\n" + jopen + "\n" + jclose + "\n" + jvol);
-		
-				
+				Set<String> entries = timeSeries.keySet();
+				for (String entry : entries) {
+					JsonObject timeSeriesJobj = timeSeries.getAsJsonObject(entry);
+					String jopen = timeSeriesJobj.get("1. open").getAsString();
+					String jclose = timeSeriesJobj.get("4. close").getAsString();
+					String jvol = timeSeriesJobj.get("5. volume").getAsString();
+
+					model.addRow(new String[] {entry, jopen, jclose, jvol});
+				}
 			}
 		});
 	}

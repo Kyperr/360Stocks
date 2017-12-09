@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -27,9 +28,8 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 				try {
-					final MainFrame frame = new MainFrame();
-					//frame.pack();
-					frame.setVisible(true);
+					new MainFrame();
+					
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}
@@ -44,10 +44,10 @@ private JTabbedPane tabbedPane;
 	 */
 	public MainFrame() {
 		this.setLocation(20, 20);
-		this.setPreferredSize(new Dimension(760,420));
+		this.setPreferredSize(new Dimension(600,600));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 600);
+		setBounds(100, 100, 800, 600);
 		
 		
 		final JTabbedPane tabbedPane = new JTabbedPane();
@@ -58,14 +58,17 @@ private JTabbedPane tabbedPane;
 		SpecificPanel specific = new SpecificPanel();
 		
 		tabbedPane.addTab("Home", home);
-		tabbedPane.addTab("Specific", specific);
+		tabbedPane.addTab("Single Stock Intraday", specific);
 
 		Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int iCoordX = (objDimension.width - this.getWidth()) / 2;
 		int iCoordY = (objDimension.height - this.getHeight()) / 2;
 		this.setLocation(iCoordX, iCoordY);
 
-		add(tabbedPane);
+		add(tabbedPane, BorderLayout.CENTER);
+
+		pack();
+		setVisible(true);
 	}
 
 }
