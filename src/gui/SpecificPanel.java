@@ -3,12 +3,19 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,8 +35,9 @@ public class SpecificPanel extends JPanel {
 	private static final long serialVersionUID = -2694967280433167581L;
 	private JTextArea dataArea;
 	private DataModel dataModel;
+	private String filePath = System.getProperty("user.dir")+ "/top5.txt";
 
-	public SpecificPanel() {
+	public SpecificPanel() throws IOException {
 		
 		DataModel dataModel = new DataModel();
 		this.dataModel = dataModel;
@@ -48,17 +56,39 @@ public class SpecificPanel extends JPanel {
 
 		add(mainPanel);
 
+		BufferedReader input = new BufferedReader(new FileReader(filePath));
+		List<String> strings = new ArrayList<String>();
+		try {
+		  String line = null;
+		  while (( line = input.readLine()) != null){
+		    strings.add(line);
+		  }
+		}
+		catch (FileNotFoundException e) {
+		    System.err.println("Error, file " + filePath + " didn't exist.");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		finally {
+		    input.close();
+		}
+
+		String[] lineArray = strings.toArray(new String[]{});
+
+		JComboBox searchSymbols = new JComboBox(lineArray);
+		
 		JPanel searchPanel = new JPanel();
 		TitledBorder searchBorder;
 		searchBorder = BorderFactory.createTitledBorder("Search");
 		searchPanel.setBorder(searchBorder);
 		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
-		final JTextField searchBox = new JTextField("GOOG", 4);
+		//final JTextField searchBox = new JTextField("GOOG", 4);
 		searchPanel.add(new JLabel("Symbol:  "));
 		JButton searchButton = new JButton("Search");
 		searchButton.setMnemonic(KeyEvent.VK_S);
 		searchButton.setToolTipText("Search for a specific stock by symbol.");
-		searchPanel.add(searchBox);
+		searchPanel.add(searchSymbols);
 		searchPanel.add(searchButton);
 		contentPanel.add(searchPanel);
 
@@ -95,7 +125,7 @@ public class SpecificPanel extends JPanel {
 				}
 				
 				//do the thing here
-				String symb = searchBox.getText().toUpperCase();
+				String symb = searchSymbols.getSelectedItem().toString().toUpperCase();
 				// add pattern matching to not grunk up the search here
 				String jsonstring = dataModel.getSingleIntraday(symb);
 

@@ -5,10 +5,13 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager.*;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 public class MainFrame extends JFrame {
@@ -20,6 +23,20 @@ public class MainFrame extends JFrame {
 
 //	private final JPanel contentPane;
 
+	private static void initLookAndFeel() {
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
+	}
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -27,6 +44,7 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				initLookAndFeel();
 				try {
 					new MainFrame();
 					
@@ -41,13 +59,14 @@ private JTabbedPane tabbedPane;
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public MainFrame() {
+	public MainFrame() throws IOException {
 		this.setLocation(20, 20);
-		this.setPreferredSize(new Dimension(600,600));
+		this.setPreferredSize(new Dimension(600,700));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 800, 700);
 		
 		
 		final JTabbedPane tabbedPane = new JTabbedPane();
