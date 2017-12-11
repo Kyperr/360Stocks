@@ -119,4 +119,9 @@ public class TimeSeriesIntradayData extends AbstractQueryFunctionData {
 
 	}
 
+	@Override
+	public String getJSONObjectHeader() {
+		return "Time Series (" + interval.getLiteral() + ")";
+	}
+
 }

@@ -20,5 +20,7 @@ public interface QueryFunctionData {
 	 * @return String
 	 */
 	String createFunctionStringFor(String stockSymbol);
+	
+	String getJSONObjectHeader();
 
 }

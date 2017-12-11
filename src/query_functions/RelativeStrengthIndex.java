@@ -6,15 +6,15 @@ import java.util.Optional;
 
 import query_functions.TimeSeriesIntradayData.IntradayInterval;
 
-public class SimpleMovingAveragesData extends AbstractQueryFunctionData {
+public class RelativeStrengthIndex extends AbstractQueryFunctionData {
 
-	public final static String FUNCTION_NAME = "SMA";
+	public final static String FUNCTION_NAME = "RSI";
 
 	private final Interval interval;
 	private final Integer time_period;
 	private final SeriesType series_type;
 
-	public SimpleMovingAveragesData(Interval interval, Integer timePeriod, SeriesType seriesType) {
+	public RelativeStrengthIndex(Interval interval, Integer timePeriod, SeriesType seriesType) {
 		super(FUNCTION_NAME);
 		this.interval = interval;
 		this.time_period = timePeriod;
@@ -31,7 +31,7 @@ public class SimpleMovingAveragesData extends AbstractQueryFunctionData {
 	}
 	@Override
 	public String getJSONObjectHeader() {
-		return "Technical Analysis: SMA";
+		return "Technical Analysis: RSI";
 	}
 
 }

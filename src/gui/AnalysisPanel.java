@@ -31,6 +31,8 @@ import javax.swing.table.TableColumn;
 import main.DataModel;
 import query_functions.AbstractQueryFunctionData;
 import query_functions.Interval;
+import query_functions.QueryFunctionData;
+import query_functions.RelativeStrengthIndex;
 import query_functions.SeriesType;
 import query_functions.SimpleMovingAveragesData;
 
@@ -48,6 +50,10 @@ public class AnalysisPanel extends JPanel {
 		analytics.put(sma_60_high, new SimpleMovingAveragesData(Interval.Daily, 60, SeriesType.HIGH));
 		String sma_60_low = "SMA(60)_Low";
 		analytics.put(sma_60_low, new SimpleMovingAveragesData(Interval.Daily, 60, SeriesType.LOW));
+		String rsi_60_high = "RSI(60)_High";
+		analytics.put(rsi_60_high, new RelativeStrengthIndex(Interval.Daily, 60, SeriesType.HIGH));
+		String rsi_60_low = "RSI(60)_Low";
+		analytics.put(rsi_60_low, new RelativeStrengthIndex(Interval.Daily, 60, SeriesType.LOW));
 	}
 
 	public AnalysisPanel() throws IOException {
@@ -114,7 +120,7 @@ public class AnalysisPanel extends JPanel {
 
 
 		contentPanel.add(dataPanel);
-		String[] columns = {"Date/Time", "SMA"};
+		String[] columns = {"Date/Time", "Value"};
 		String[][] data = {};
 		
 		JTable table = new JTable(new DefaultTableModel(data, columns));
@@ -142,18 +148,22 @@ public class AnalysisPanel extends JPanel {
 				//do the thing here
 				String symb = searchSymbols.getSelectedItem().toString().toUpperCase();
 				// add pattern matching to not grunk up the search here
-				String jsonstring = dataModel.getResponse(symb, analytics.get(searchAnalytics.getSelectedItem().toString()));//dataModel.getSingleIntraday(symb);
+				QueryFunctionData data = analytics.get(searchAnalytics.getSelectedItem().toString());
+				String jsonstring = dataModel.getResponse(symb, data);//dataModel.getSingleIntraday(symb);
 
 				JsonElement jelem = new JsonParser().parse(jsonstring);
 				JsonObject jobj = jelem.getAsJsonObject();
-				JsonObject timeSeries = jobj.getAsJsonObject("Technical Analysis: SMA");
+				JsonObject timeSeries = jobj.getAsJsonObject(data.getJSONObjectHeader());
 				Set<String> entries = timeSeries.keySet();
 				
 				for (String entry : entries) {
 					JsonObject smaObj = timeSeries.getAsJsonObject(entry);
-					String sma = smaObj.get("SMA").getAsString();
+					Set<String> fields = smaObj.keySet();
+					for(String field : fields) {
+						String fieldValue = smaObj.get(field).getAsString();
+						model.addRow(new String[] {entry, fieldValue});
+					}
 
-					model.addRow(new String[] {entry, sma});
 				}
 			}
 		});
