@@ -53,6 +53,41 @@ public class DataModel {
 		return null;
 	}
 	
+	public String getResponse(String symbol, QueryFunctionData qFunctionData) {
+
+		// The object we created to build the query string for us.
+		QueryBuilder qb = new QueryBuilder(API_URL, API_KEY);
+
+		// The data for the specific function we wish to call, and its args.
+
+		// Execute query and receive a BufferedReader object that contains the result.
+		BufferedReader br;
+		
+		StringBuilder sb = new StringBuilder();
+		try {
+			br = qb.executeFunction(symbol, qFunctionData);
+
+			// Print out the stuff in our buffered reader.
+			String output;
+			//System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				//System.out.println(output);
+				sb.append(output);
+			}
+			
+			// Because we are using a buffered reader, we can close the stream here.
+			br.close();
+			
+			return sb.toString();
+			
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
 	
 	
 

@@ -75,9 +75,11 @@ private JTabbedPane tabbedPane;
 		
 		HomePanel home = new HomePanel();
 		SpecificPanel specific = new SpecificPanel();
+		AnalysisPanel anPanel = new AnalysisPanel();
 		
 		tabbedPane.addTab("Home", home);
 		tabbedPane.addTab("Single Stock Intraday", specific);
+		tabbedPane.addTab("Run Analysis", anPanel);
 
 		Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int iCoordX = (objDimension.width - this.getWidth()) / 2;

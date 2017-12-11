@@ -12,6 +12,8 @@ import query_functions.QueryFunctionData;
 
 public class QueryBuilder {
 
+	private final static DefaultHttpClient httpClient = new DefaultHttpClient();
+
 	private final String url;
 	private final String apiKey;
 
@@ -47,10 +49,10 @@ public class QueryBuilder {
 		 */
 		String query = buildQuery(symbol, qFunctionData);
 
-		//System.out.println(query);
+		// System.out.println(query);
 
 		// Below is setting up for a connection, it is not connected yet.
-		DefaultHttpClient httpClient = new DefaultHttpClient();
+
 		HttpGet getRequest = new HttpGet(query); // Query string is inserted here.
 		getRequest.addHeader("accept", "application/json");
 
