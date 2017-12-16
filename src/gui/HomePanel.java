@@ -74,31 +74,21 @@ public class HomePanel extends JPanel {
 		
 		contentPanel.add(dataPanel);
 		
-		
-		try (BufferedReader br = new BufferedReader(new FileReader("top5.txt"))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				String jsonstring = dataModel.getSingleIntraday(line);
+		for (String line : MainFrame.top) {
+			String jsonstring = dataModel.getSingleIntraday(line);
 
-				JsonElement jelem = new JsonParser().parse(jsonstring);
-				JsonObject jobj = jelem.getAsJsonObject();
-				JsonObject jobjmeta = jobj.getAsJsonObject("Meta Data");
-				String jsymb = jobjmeta.get("2. Symbol").getAsString();
-				String jrefreshed = jobjmeta.get("3. Last Refreshed").getAsString();
-				JsonObject timeSeries = jobj.getAsJsonObject("Time Series (1min)");
-				JsonObject mostrecentseries = timeSeries.getAsJsonObject(jrefreshed);
-				String jopen = mostrecentseries.get("1. open").getAsString();
-				String jclose = mostrecentseries.get("4. close").getAsString();
-				String jvol = mostrecentseries.get("5. volume").getAsString();
-				
-				model.addRow(new String[] {line, jrefreshed, jopen, jclose, jvol});
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JsonElement jelem = new JsonParser().parse(jsonstring);
+			JsonObject jobj = jelem.getAsJsonObject();
+			JsonObject jobjmeta = jobj.getAsJsonObject("Meta Data");
+			String jsymb = jobjmeta.get("2. Symbol").getAsString();
+			String jrefreshed = jobjmeta.get("3. Last Refreshed").getAsString();
+			JsonObject timeSeries = jobj.getAsJsonObject("Time Series (1min)");
+			JsonObject mostrecentseries = timeSeries.getAsJsonObject(jrefreshed);
+			String jopen = mostrecentseries.get("1. open").getAsString();
+			String jclose = mostrecentseries.get("4. close").getAsString();
+			String jvol = mostrecentseries.get("5. volume").getAsString();
+
+			model.addRow(new String[] { line, jrefreshed, jopen, jclose, jvol });
 		}
 		
 	}

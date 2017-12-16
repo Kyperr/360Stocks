@@ -43,7 +43,6 @@ public class AnalysisPanel extends JPanel {
 	private static final long serialVersionUID = -2694967280433167581L;
 	private JTextArea dataArea;
 	private DataModel dataModel;
-	private String filePath = System.getProperty("user.dir")+ "/top5.txt";
 	private Map<String, AbstractQueryFunctionData> analytics = new HashMap<>();
 	{//Empty initializer
 		String sma_60_high = "SMA(60)_High";
@@ -75,28 +74,8 @@ public class AnalysisPanel extends JPanel {
 
 		add(mainPanel);
 
-		BufferedReader input = new BufferedReader(new FileReader(filePath));
-		List<String> strings = new ArrayList<String>();
-		try {
-		  String line = null;
-		  while (( line = input.readLine()) != null){
-		    strings.add(line);
-		  }
-		}
-		catch (FileNotFoundException e) {
-		    System.err.println("Error, file " + filePath + " didn't exist.");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		finally {
-		    input.close();
-		}
-
-		String[] lineArray = strings.toArray(new String[]{});
-
-		JComboBox searchSymbols = new JComboBox(lineArray);
-		JComboBox searchAnalytics = new JComboBox(analytics.keySet().toArray());
+		JComboBox<String> searchSymbols = new JComboBox<String>(MainFrame.top);
+		JComboBox<String> searchAnalytics = new JComboBox(analytics.keySet().toArray());
 		
 		JPanel searchPanel = new JPanel();
 		TitledBorder searchBorder;

@@ -15,6 +15,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 public class MainFrame extends JFrame {
+	
+	public static final String[] top = {"GOOG", "AMZN", "MSFT", "TSLA"};
 
 	/**
 	 * Auto-generated serialVersionUID
